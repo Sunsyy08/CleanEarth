@@ -1,116 +1,97 @@
+// ui/IdeaDetailScreen.kt
 package com.example.cleanearth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.cleanearth.R
+import com.example.cleanearth.data.ReformIdea
 
-// ───── 아이디어 데이터 클래스 ─────
-public data class Idea(
-    val id: String,
-    val title: String,
-    val desc: String,
-    val imageRes: Int
-)
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IdeaDetailScreen(
-    idea: ReformIdeasScreen = ReformIdeasScreen(
-        id = "1",
-        title = "Flower Vase",
-        desc = "플라스틱 병을 반으로 잘라 뒤집어 꽃을 꽂는 방법을 단계별로 안내합니다.",
-        imageRes = R.drawable.flowersbottle
-    ),
-    onRetakeClick: () -> Unit = {},
-    onHomeClick: () -> Unit = {}
+    idea: ReformIdea,
+    onBack: () -> Unit = {}
 ) {
     Scaffold(
-        bottomBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Button(
-                    onClick = onRetakeClick,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Retake")
+        topBar = {
+            TopAppBar(
+                title = { Text(idea.name) },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
                 }
-                Button(
-                    onClick = onHomeClick,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Home")
-                }
-            }
+            )
         }
-    ) { innerPadding ->
+    ) { inner ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+            Modifier
+                .padding(inner)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp)
+                .padding(horizontal = 16.dp)
         ) {
-            // 1) 상단 이미지
+            Spacer(Modifier.height(16.dp))
+
+            /* 썸네일 이미지 */
             Image(
-                painter = painterResource(id = idea.imageRes),
-                contentDescription = idea.title,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
+                painterResource(idea.imageRes),
+                contentDescription = idea.name,
+                Modifier
                     .fillMaxWidth()
                     .height(240.dp)
+                    .clip(MaterialTheme.shapes.medium),
+                contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
-            // 2) 제목
+            /* 제목 + 부제목 */
             Text(
-                text = idea.title,
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+                idea.name,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
             )
+            Spacer(Modifier.height(8.dp))
+            Text(idea.subtitle, style = MaterialTheme.typography.bodyLarge)
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(Modifier.height(24.dp))
 
-            // 3) 설명
+            /* 단계별 튜토리얼 */
             Text(
-                text = idea.desc,
-                style = MaterialTheme.typography.bodyMedium
+                "Step-by-Step Tutorial",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
             )
+            Spacer(Modifier.height(12.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = MaterialTheme.shapes.medium,
+                tonalElevation = 2.dp,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(Modifier.padding(16.dp)) {
+                    idea.steps.forEachIndexed { i, step ->
+                        Text("${i + 1}. $step", style = MaterialTheme.typography.bodyLarge)
+                        if (i != idea.steps.lastIndex) Spacer(Modifier.height(6.dp))
+                    }
+                }
+            }
 
-            // 4) 튜토리얼 스텝
-            Text(
-                text = "Step-by-Step Tutorial",
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = """
-                    1. 준비물: 플라스틱 병, 가위, 페인트 등
-                    2. 병을 절단하고 깨끗이 세척하기
-                    3. 원하는 모양으로 뒤집거나 꾸미기
-                    4. 꽃이나 식물을 꽂아서 완성하기
-                """.trimIndent(),
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            Spacer(modifier = Modifier.height(80.dp)) // 버튼과 겹치지 않도록 여유 공간
+            Spacer(Modifier.height(32.dp))
         }
     }
 }
@@ -118,9 +99,17 @@ fun IdeaDetailScreen(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewIdeaDetailScreen() {
-    Surface {
-        IdeaDetailScreen()
-    }
+    // 간단한 더미 데이터로 미리보기
+    val sample = ReformIdea(
+        id = "PL01",
+        name = "자동 급수 화분",
+        subtitle = "뒤집은 병 속 물 공급",
+        steps = listOf(
+            "물병 뚜껑에 2 mm 구멍 3개 뚫기",
+            "물 채운 뒤 거꾸로 화분 흙에 꽂기",
+            "3–5일 간격으로 물 보충"
+        ),
+        imageRes = R.drawable.papercup   // 프로젝트에 있는 임시 이미지
+    )
+    MaterialTheme { IdeaDetailScreen(sample) }
 }
-
-

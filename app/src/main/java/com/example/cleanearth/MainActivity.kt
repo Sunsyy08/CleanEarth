@@ -5,9 +5,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.cleanearth.ui.MainScreen
+import com.example.cleanearth.MainScreen
 import com.example.cleanearth.ui.UserProfileScreen
-import com.example.cleanearth.Idea
 import com.example.cleanearth.ReformIdeasScreen
 import com.example.cleanearth.ReformNavHost
 import com.example.cleanearth.ui.theme.CleanEarthTheme

@@ -1,4 +1,4 @@
-package com.example.cleanearth.ui
+package com.example.cleanearth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
