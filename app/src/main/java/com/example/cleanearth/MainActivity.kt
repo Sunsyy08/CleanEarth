@@ -22,12 +22,12 @@ class MainActivity : ComponentActivity() {
             //SignUpScreen()
                 //ProfileScreen()
 //                LoginScreen()
-                //MainScreen()
+                MainScreen()
                 //UserProfileScreen()
                 //ReformIdeasScreen()
                 //IdeaDetailScreen()
                 //ReformNavHost()
-                CameraPreviewScreen()
+                //CameraPreviewScreen("result")
             }
         }
     }
