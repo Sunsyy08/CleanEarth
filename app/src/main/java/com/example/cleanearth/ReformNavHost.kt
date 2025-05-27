@@ -13,7 +13,7 @@ fun ReformNavHost() {
 
     NavHost(
         navController = navController,
-        startDestination = "ideas/종이"   // 첫 화면을 플라스틱 추천으로
+        startDestination = "ideas/금속"   // 첫 화면을 플라스틱 추천으로
     ) {
 
         /* ───── 카테고리별 추천 리스트 화면 ───── */
@@ -21,7 +21,7 @@ fun ReformNavHost() {
             route = "ideas/{category}",
             arguments = listOf(navArgument("category") { type = NavType.StringType })
         ) { backStack ->
-            val category = backStack.arguments?.getString("category") ?: "종이"
+            val category = backStack.arguments?.getString("category") ?: "금속"
 
             ReformIdeasScreen(
                 category = category,
