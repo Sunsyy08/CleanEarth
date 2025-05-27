@@ -276,4 +276,3 @@ fun getRandomIdea(category: String): ReformIdea? =
 fun getRandomIdeas(category: String, count: Int = 3): List<ReformIdea> =
     ideasByCategory[category]?.shuffled(Random(System.currentTimeMillis()))?.take(count) ?: emptyList()
 
-
