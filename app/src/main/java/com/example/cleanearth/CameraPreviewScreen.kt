@@ -16,13 +16,25 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun CameraPreviewScreen(
-    currentRoute: String = "camera", // 현재 선택된 탭
-    onTabSelect: (String) -> Unit = {} // 탭 변경 시 호출
+    onNavigateToSignUp: () -> Unit = {},
+    onNavigateToLogin: () -> Unit = {},
+    onNavigateToCamera: () -> Unit = {}
 ) {
+    val currentRoute = "camera"
     val darkGreen = Color(0xFF4CAF50)
+
     Scaffold(
         bottomBar = {
-            BottomNavigationBar(currentRoute, onTabSelect)
+            BottomNav(
+                currentRoute = currentRoute,
+                onTabSelect = { route ->
+                    when (route) {
+                        "home" -> onNavigateToSignUp()
+                        "camera" -> onNavigateToCamera() // 현재 화면이지만 유지
+                        "profile" -> onNavigateToLogin()
+                    }
+                }
+            )
         }
     ) { innerPadding ->
         Column(
@@ -34,11 +46,10 @@ fun CameraPreviewScreen(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 더 줄인 카메라 미리보기 영역
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.75f)
-                    .weight(0.55f) // 더 작게 조정
+                    .weight(0.55f)
                     .background(Color.LightGray),
                 contentAlignment = Alignment.Center
             ) {
@@ -47,13 +58,11 @@ fun CameraPreviewScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // 촬영 버튼
             Box(
                 modifier = Modifier
                     .size(64.dp)
                     .background(darkGreen.copy(alpha = 0.6f), shape = MaterialTheme.shapes.large),
                 contentAlignment = Alignment.Center
-
             ) {
                 Icon(
                     imageVector = Icons.Default.PhotoCamera,
@@ -65,6 +74,7 @@ fun CameraPreviewScreen(
         }
     }
 }
+
 
 @Composable
 fun BottomNavigationBar(currentRoute: String, onTabSelect: (String) -> Unit) {
