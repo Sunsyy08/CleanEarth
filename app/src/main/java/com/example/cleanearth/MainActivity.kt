@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
                 //ReformIdeasScreen()
                 //IdeaDetailScreen()
                 //ReformNavHost()
-                CameraPreviewScreen()
+                //CameraPreviewScreen()
             }
         }
     }
