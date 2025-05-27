@@ -15,6 +15,8 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,9 +41,14 @@ fun MainScreen(
     Scaffold(
         bottomBar = {
             BottomNav(
-                selectedIndex = 0,
-                onNavigateToSignUp = onNavigateToSignUp,
-                onNavigateToLogin = onNavigateToLogin
+                currentRoute = "home", // 또는 상태에 따라 동적으로 설정 가능
+                onTabSelect = { route ->
+                    when (route) {
+                        "home" -> onNavigateToSignUp()
+                        "camera" -> {} // 예: 카메라로 이동
+                        "profile" -> onNavigateToLogin()
+                    }
+                }
             )
         }
     ) { innerPadding ->
@@ -279,57 +286,29 @@ private fun RecommendationItem(
 }
 
 @Composable
-private fun BottomNav(
-    selectedIndex: Int,
-    onNavigateToSignUp: () -> Unit,
-    onNavigateToLogin: () -> Unit,
-    modifier: Modifier = Modifier
+fun BottomNav(
+    currentRoute: String,
+    onTabSelect: (String) -> Unit
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .navigationBarsPadding()
-            .height(64.dp)
-            .padding(horizontal = 8.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        val navItems = listOf(
-            "Home" to Icons.Filled.Home,
-            "Camera" to Icons.Filled.CameraAlt,
-            "Profile" to Icons.Filled.AccountCircle
+    NavigationBar {
+        NavigationBarItem(
+            icon = { Icon(Icons.Default.Home, contentDescription = "홈") },
+            selected = currentRoute == "home",
+            onClick = { onTabSelect("home") },
+            label = { Text("홈") }
         )
-        navItems.forEachIndexed { index, (label, icon) ->
-            val selected = index == selectedIndex
-            Column(
-                modifier = Modifier
-                    .clickable {
-                        when (label) {
-                            "Home" -> onNavigateToSignUp()
-                            "Camera" -> {}
-                            "Profile" -> onNavigateToLogin()
-                        }
-                    }
-                    .padding(horizontal = 12.dp)
-                    .fillMaxHeight(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = label,
-                    tint = if (selected) Color(0xFF121717) else Color(0xFF638780),
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = label,
-                    color = if (selected) Color(0xFF121717) else Color(0xFF638780),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
-            }
-        }
+        NavigationBarItem(
+            icon = { Icon(Icons.Default.PhotoCamera, contentDescription = "카메라") },
+            selected = currentRoute == "camera",
+            onClick = { onTabSelect("camera") },
+            label = { Text("카메라") }
+        )
+        NavigationBarItem(
+            icon = { Icon(Icons.Default.Person, contentDescription = "프로필") },
+            selected = currentRoute == "profile",
+            onClick = { onTabSelect("profile") },
+            label = { Text("프로필") }
+        )
     }
 }
+

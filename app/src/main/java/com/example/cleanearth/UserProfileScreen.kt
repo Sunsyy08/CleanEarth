@@ -18,22 +18,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.cleanearth.BottomNav
 
 @Composable
 fun UserProfileScreen(
-    currentRoute: String = "profile",           // 하단 탭 선택 상태
-    onTabSelect: (String) -> Unit = {},         // 탭 변경 콜백
-    onLogoutClick: () -> Unit = {}              // 로그아웃 콜백
+    onNavigateToSignUp: () -> Unit = {},
+    onNavigateToLogin: () -> Unit = {},
+    onNavigateToCamera: () -> Unit = {},
+    onLogoutClick: () -> Unit = {}
 ) {
-    /* ─── 예시 프로필 데이터 ─── */
-    val name = "홍길동"
-    val email = "honggildong@example.com"
-    val dateOfBirth = "1990년 1월 1일"
-    val gender = "Male"
+    val currentRoute = "profile"
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        bottomBar = { BottomNavBar(currentRoute, onTabSelect) }   // ③ 하단 탭바
+        bottomBar = {
+            BottomNav(
+                currentRoute = currentRoute,
+                onTabSelect = { route ->
+                    when (route) {
+                        "home" -> onNavigateToSignUp()
+                        "camera" -> onNavigateToCamera()
+                        "profile" -> onNavigateToLogin()
+                    }
+                }
+            )
+        }
     ) { inner ->
         Column(
             modifier = Modifier
@@ -42,33 +51,27 @@ fun UserProfileScreen(
                 .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 16.dp)
         ) {
-            /* ─── 타이틀 ─── */
             Text(
                 text = "Profile",
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(top = 64.dp, bottom = 24.dp)
             )
 
-            /* ─── 프로필 카드 ─── */
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(Modifier.padding(vertical = 16.dp)) {
-                    ProfileItem(label = "Name",  value = name)
+                    ProfileItem(label = "Name",  value = "홍길동")
+                    Divider(thickness = 1.dp, color = Color.LightGray)
+                    ProfileItem(label = "Email", value = "honggildong@example.com")
+                    Divider(thickness = 1.dp, color = Color.LightGray)
+                    ProfileItem(label = "Date of Birth", value = "1990년 1월 1일")
+                    Divider(thickness = 1.dp, color = Color.LightGray)
+                    ProfileItem(label = "Gender", value = "Male")
                     Divider(thickness = 1.dp, color = Color.LightGray)
 
-                    ProfileItem(label = "Email", value = email)
-                    Divider(thickness = 1.dp, color = Color.LightGray)
-
-                    ProfileItem(label = "Date of Birth", value = dateOfBirth)
-                    Divider(thickness = 1.dp, color = Color.LightGray)
-
-                    ProfileItem(label = "Gender", value = gender)
-                    Divider(thickness = 1.dp, color = Color.LightGray)
-
-                    /* ─── ② 반투명 회색 로그아웃 줄 ─── */
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -95,6 +98,7 @@ fun UserProfileScreen(
         }
     }
 }
+
 
 /* ────────────────────────────────────────── */
 /* 하단 탭바: 홈 화면과 동일하게 재사용      */
