@@ -1,6 +1,7 @@
 // ui/IdeaDetailScreen.kt
 package com.example.cleanearth
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -9,47 +10,97 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.cleanearth.R
 import com.example.cleanearth.data.ReformIdea
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IdeaDetailScreen(
     idea: ReformIdea,
-    onBack: () -> Unit = {}
+    onBack: () -> Unit = {},
+    onRetake: () -> Unit = {},   // 카메라 다시 찍기
+    onHome: () -> Unit = {}      // 홈으로 이동
 ) {
+    val mainColor = Color(0xFF4CAF50)
+    val white = Color(0xffffffff)
+
+
     Scaffold(
+        /* ── 상단 AppBar ── */
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = { Text(idea.name) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.Black
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = white,
+                    titleContentColor = Color.Black,
+                    navigationIconContentColor = Color.White
+                )
+            )
+        },
+
+        /* ── 하단 버튼 바 ── */
+        bottomBar = {
+            BottomAppBar(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    /* RETAKE */
+                    FilledTonalButton(
+                        onClick = onRetake,
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.filledTonalButtonColors(
+                            containerColor = mainColor,
+                            contentColor = Color.White
+                        )
+                    ) {
+                        Text("RETAKE")
+                    }
+
+                    /* HOME */
+                    OutlinedButton(
+                        onClick = onHome,
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = mainColor),
+                        border = BorderStroke(1.dp, mainColor),
+                    ) {
+                        Text("HOME")
                     }
                 }
-            )
+            }
         }
     ) { inner ->
         Column(
-            Modifier
+            modifier = Modifier
                 .padding(inner)
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(Modifier.height(16.dp))
 
-            /* 썸네일 이미지 */
+            /* ── 썸네일 ── */
             Image(
                 painterResource(idea.imageRes),
                 contentDescription = idea.name,
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .height(240.dp)
                     .clip(MaterialTheme.shapes.medium),
@@ -58,7 +109,7 @@ fun IdeaDetailScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            /* 제목 + 부제목 */
+            /* ── 제목 & 부제목 ── */
             Text(
                 idea.name,
                 style = MaterialTheme.typography.titleLarge,
@@ -69,7 +120,7 @@ fun IdeaDetailScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            /* 단계별 튜토리얼 */
+            /* ── 단계별 튜토리얼 ── */
             Text(
                 "Step-by-Step Tutorial",
                 style = MaterialTheme.typography.titleMedium,
@@ -91,25 +142,7 @@ fun IdeaDetailScreen(
                 }
             }
 
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(80.dp)) /* 하단 바와 내용 간 여유 */
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun PreviewIdeaDetailScreen() {
-    // 간단한 더미 데이터로 미리보기
-    val sample = ReformIdea(
-        id = "PL01",
-        name = "자동 급수 화분",
-        subtitle = "뒤집은 병 속 물 공급",
-        steps = listOf(
-            "물병 뚜껑에 2 mm 구멍 3개 뚫기",
-            "물 채운 뒤 거꾸로 화분 흙에 꽂기",
-            "3–5일 간격으로 물 보충"
-        ),
-        imageRes = R.drawable.papercup   // 프로젝트에 있는 임시 이미지
-    )
-    MaterialTheme { IdeaDetailScreen(sample) }
 }

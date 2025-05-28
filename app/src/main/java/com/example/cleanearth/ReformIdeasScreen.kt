@@ -1,6 +1,7 @@
 // ui/ReformIdeasScreen.kt
 package com.example.cleanearth
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,27 +21,35 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.cleanearth.data.*
-// ReformIdea, getRandomIdeas
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReformIdeasScreen(
-    category: String,                     // 예: "플라스틱"
+    category: String,
     onIdeaClick: (ReformIdea) -> Unit = {},
     onHomeClick: () -> Unit = {}
 ) {
+    /* ─── 팔레트 ─── */
+    val mainColor = Color(0xFF4CAF50)
+    val white = Color(0xffffffff)
+    val black = Color(0xff000000)
+
     /* 상태: 현재 추천 리스트(최초 4개) */
-    var ideas by remember(category) {
-        mutableStateOf(getRandomIdeas(category, 4))
-    }
+    var ideas by remember(category) { mutableStateOf(getRandomIdeas(category, 4)) }
 
     Scaffold(
         topBar = {
+            /* 상단바를 메인 컬러로 통일 */
             CenterAlignedTopAppBar(
                 title = { Text("$category 리폼 아이디어") },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = white ,
+                    titleContentColor = Color.Black,
+                    actionIconContentColor = Color.White
+                ),
                 actions = {
                     IconButton(onClick = onHomeClick) {
-                        Icon(Icons.Default.Home, contentDescription = "Home")
+                        Icon(Icons.Default.Home, contentDescription = "Home", tint = Color.Black)
                     }
                 }
             )
@@ -53,7 +62,7 @@ fun ReformIdeasScreen(
                 .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
 
-            /* ----- 카테고리 대표 썸네일 Row ----- */
+            /* ───── 카테고리 대표 썸네일 Row ───── */
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -63,59 +72,69 @@ fun ReformIdeasScreen(
                         painter = painterResource(id = idea.imageRes),
                         contentDescription = idea.name,
                         modifier = Modifier
-                            .width(120.dp)
-                            .height(120.dp)
+                            .size(120.dp)
                             .clip(MaterialTheme.shapes.medium),
                         contentScale = ContentScale.Crop
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
-            /* 다시 추천 버튼 */
+            /* ───── “다시 추천” 버튼 ───── */
             OutlinedButton(
                 onClick = { ideas = getRandomIdeas(category, 4) },
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = mainColor),
+                border = BorderStroke(1.dp, mainColor),
+                shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.align(Alignment.End)
             ) {
                 Text("다시 추천")
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
-            /* ----- 카드 리스트 ----- */
+            /* ───── 카드 리스트 ───── */
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(ideas) { idea ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onIdeaClick(idea) }
-                            .padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    /* 그림 + 텍스트를 Card 로 감싸 가독성 ↑ */
+                    Card(
+                        onClick = { onIdeaClick(idea) },
+                        shape = MaterialTheme.shapes.medium,
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surface
+                        ),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Image(
-                            painter = painterResource(id = idea.imageRes),
-                            contentDescription = idea.name,
-                            modifier = Modifier
-                                .size(60.dp)
-                                .clip(MaterialTheme.shapes.medium),
-                            contentScale = ContentScale.Crop
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                idea.name,
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(12.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = idea.imageRes),
+                                contentDescription = idea.name,
+                                modifier = Modifier
+                                    .size(60.dp)
+                                    .clip(MaterialTheme.shapes.medium),
+                                contentScale = ContentScale.Crop
                             )
-                            Text(
-                                idea.subtitle,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = Color.Gray
-                            )
+                            Spacer(Modifier.width(12.dp))
+                            Column {
+                                Text(
+                                    idea.name,
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    idea.subtitle,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = Color.Gray
+                                )
+                            }
                         }
                     }
                 }
