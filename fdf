@@ -1,0 +1,90 @@
+[33mcommit 8611fe435032d21d8fbfa02fcbc01e77c219a753[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Sunsyy08 <seonhyben864@gmail.com>
+Date:   Wed May 28 20:22:50 2025 +0900
+
+    not recycling message
+
+[33mcommit e39d09d70fc5a6830d55dde0d65689401ff58867[m
+Author: sunhyuk <seonhyben864@gmail.com>
+Date:   Tue May 27 23:52:51 2025 +0900
+
+    image reform recommendation
+
+[33mcommit 54173ea1178a7f895f2fc158241e10f5a644eda3[m
+Merge: 5d0f5c2 18bd4b7
+Author: sunhyuk <seonhyben864@gmail.com>
+Date:   Tue May 27 22:15:28 2025 +0900
+
+    Merge branch 'main' of https://github.com/Sunsyy08/CleanEarth
+
+[33mcommit 5d0f5c23a6d4854843e91cb3b418781f98eab6bc[m
+Author: sunhyuk <seonhyben864@gmail.com>
+Date:   Tue May 27 22:13:10 2025 +0900
+
+    ëSave local changes
+
+[33mcommit 18bd4b758bf3247f90895173f439c3d3c22e533f[m
+Author: Sunsyy08 <seonhyben864@gmail.com>
+Date:   Tue May 27 20:44:12 2025 +0900
+
+    add image
+
+[33mcommit a20ec1e12b018b469fc637ea29f9601edc38449d[m
+Author: Sunsyy08 <seonhyben864@gmail.com>
+Date:   Tue May 27 18:51:28 2025 +0900
+
+    loading
+
+[33mcommit daa7245a1551b499c22a855b13a011cb16ff9f17[m
+Author: Sunsyy08 <seonhyben864@gmail.com>
+Date:   Tue May 27 18:18:37 2025 +0900
+
+    Bottom Tab Bar Unification
+
+[33mcommit 3c9acc3035f2246d8db3714c41a866b8625887ae[m
+Author: Sunsyy08 <seonhyben864@gmail.com>
+Date:   Tue May 27 18:07:29 2025 +0900
+
+    MainScreen Bottom Bar
+
+[33mcommit 9aaf994fe68c1ccdf2a4c023f1c6c311afafa6a3[m
+Author: Sunsyy08 <seonhyben864@gmail.com>
+Date:   Tue May 27 17:40:05 2025 +0900
+
+    CameraPreview
+
+[33mcommit c8f3d5404a39fe9a3b1670efad73dbfe3ad8a766[m
+Author: sunhyuk <seonhyben864@gmail.com>
+Date:   Tue May 27 01:51:17 2025 +0900
+
+    add random reform ideas
+
+[33mcommit bc3dbcaec8926fedd14f140cf97dbb0d68b6b397[m
+Author: Sunsyy08 <seonhyben864@gmail.com>
+Date:   Mon May 26 20:42:44 2025 +0900
+
+    Move the Reform Recommendation Screen
+
+[33mcommit 401c3fc08f1a297b509604e77aec01cfc7a9f14a[m
+Author: Sunsyy08 <seonhyben864@gmail.com>
+Date:   Mon May 26 17:58:44 2025 +0900
+
+    add userProfile
+
+[33mcommit 97cda641ebe310a4fe26123af12b2246ab1525fa[m
+Author: sunhyuk <seonhyben864@gmail.com>
+Date:   Sun May 25 21:12:04 2025 +0900
+
+    add mainscreen
+
+[33mcommit 994577854f4fa8ebe3cef6a7cd5509220a95a197[m
+Author: sunhyuk <seonhyben864@gmail.com>
+Date:   Sat May 24 16:28:54 2025 +0900
+
+    add Login and SignUp
+
+[33mcommit 64ca51d946cb2d5c16a6ddb67e6cc9eaf11a1ec1[m
+Author: sunhyuk <seonhyben864@gmail.com>
+Date:   Thu May 22 23:44:20 2025 +0900
+
+    first commit

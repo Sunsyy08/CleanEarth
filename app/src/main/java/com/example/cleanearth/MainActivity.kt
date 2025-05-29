@@ -18,10 +18,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CleanEarthTheme {
-//                StartScreen()
+               //StartScreen()
             //SignUpScreen()
                 //ProfileScreen()
-//                LoginScreen()
+               //LoginScreen()
                 //MainScreen()
                 //UserProfileScreen()
                 //ReformIdeasScreen()

@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -129,10 +130,14 @@ fun IdeaDetailScreen(
             Spacer(Modifier.height(12.dp))
 
             Surface(
-                color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = MaterialTheme.shapes.medium,
-                tonalElevation = 2.dp,
-                modifier = Modifier.fillMaxWidth()
+                tonalElevation = 4.dp,  // 입체감 ↑
+                border = BorderStroke(1.dp, Color.LightGray), // 테두리 추가
+                color = Color.White, // 흰 배경으로 시인성 ↑
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp) // 위아래 간격
+                    .shadow(elevation = 4.dp, shape = MaterialTheme.shapes.medium) // 명확한 입체감
             ) {
                 Column(Modifier.padding(16.dp)) {
                     idea.steps.forEachIndexed { i, step ->
@@ -141,6 +146,7 @@ fun IdeaDetailScreen(
                     }
                 }
             }
+
 
             Spacer(Modifier.height(80.dp)) /* 하단 바와 내용 간 여유 */
         }

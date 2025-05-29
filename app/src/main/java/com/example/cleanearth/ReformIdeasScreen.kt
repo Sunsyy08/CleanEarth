@@ -1,6 +1,10 @@
 // ui/ReformIdeasScreen.kt
 package com.example.cleanearth
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -8,6 +12,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
@@ -21,6 +26,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.cleanearth.data.*
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.FastOutSlowInEasing
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,21 +71,44 @@ fun ReformIdeasScreen(
         ) {
 
             /* ───── 카테고리 대표 썸네일 Row ───── */
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                items(ideas) { idea ->
-                    Image(
-                        painter = painterResource(id = idea.imageRes),
-                        contentDescription = idea.name,
-                        modifier = Modifier
-                            .size(120.dp)
-                            .clip(MaterialTheme.shapes.medium),
-                        contentScale = ContentScale.Crop
-                    )
+            Crossfade(
+                targetState = ideas,
+                animationSpec = tween(durationMillis = 450, easing = FastOutSlowInEasing),
+                label = "ThumbnailsCrossfade"
+            ) { animatedIdeas ->
+
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    itemsIndexed(animatedIdeas) { index, idea ->
+                        // 기존 AnimatedVisibility 그대로 둬서
+                        // Crossfade + slideIn/fadeIn(지연) 두 효과가 겹쳐짐
+                        val enter = remember {
+                            slideInHorizontally(
+                                initialOffsetX = { it / 2 },
+                                animationSpec = tween(300, delayMillis = index * 100)
+                            ) + fadeIn(tween(300, delayMillis = index * 100))
+                        }
+                        AnimatedVisibility(visible = true, enter = enter) {
+                            Card(
+                                shape = MaterialTheme.shapes.medium,
+                                elevation = CardDefaults.cardElevation(4.dp),
+                                border = BorderStroke(1.dp, Color.LightGray),
+                                modifier = Modifier.size(120.dp)
+                            ) {
+                                Image(
+                                    painter = painterResource(idea.imageRes),
+                                    contentDescription = idea.name,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
+                        }
+                    }
                 }
             }
+
 
             Spacer(Modifier.height(16.dp))
 
@@ -95,45 +126,49 @@ fun ReformIdeasScreen(
             Spacer(Modifier.height(16.dp))
 
             /* ───── 카드 리스트 ───── */
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(ideas) { idea ->
-                    /* 그림 + 텍스트를 Card 로 감싸 가독성 ↑ */
-                    Card(
-                        onClick = { onIdeaClick(idea) },
-                        shape = MaterialTheme.shapes.medium,
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(12.dp)
+            Crossfade(
+                targetState = ideas,
+                animationSpec = tween(durationMillis = 450, easing = FastOutSlowInEasing),
+                label = "IdeasCrossfade"
+            ) { animatedIdeas ->
+
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(animatedIdeas) { idea ->
+                        Card(
+                            onClick = { onIdeaClick(idea) },
+                            shape = MaterialTheme.shapes.medium,
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            Image(
-                                painter = painterResource(id = idea.imageRes),
-                                contentDescription = idea.name,
-                                modifier = Modifier
-                                    .size(60.dp)
-                                    .clip(MaterialTheme.shapes.medium),
-                                contentScale = ContentScale.Crop
-                            )
-                            Spacer(Modifier.width(12.dp))
-                            Column {
-                                Text(
-                                    idea.name,
-                                    style = MaterialTheme.typography.titleSmall,
-                                    fontWeight = FontWeight.Bold
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(12.dp)
+                            ) {
+                                Image(
+                                    painter = painterResource(id = idea.imageRes),
+                                    contentDescription = idea.name,
+                                    modifier = Modifier
+                                        .size(60.dp)
+                                        .clip(MaterialTheme.shapes.medium),
+                                    contentScale = ContentScale.Crop
                                 )
-                                Text(
-                                    idea.subtitle,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = Color.Gray
-                                )
+                                Spacer(Modifier.width(12.dp))
+                                Column {
+                                    Text(
+                                        idea.name,
+                                        style = MaterialTheme.typography.titleSmall,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        idea.subtitle,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = Color.Gray
+                                    )
+                                }
                             }
                         }
                     }
