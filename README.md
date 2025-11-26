@@ -8,6 +8,12 @@
 * 제작 기간 : 9일 2025.05.22 ~ 2025.05.30
 * 사용 기술 : Kotlin, Compose
 
+### 기능
+* 로그인, 회원가입
+* 키워드 검색 후 리폼 아이디어 추천
+* 이미지 촬영으로 AI가 리폼 가능 여부 판단 후 리폼 추천
+* 프로필 화면
+
 ### 스샷
 <img width="200" height="400" alt="Image" src="https://github.com/user-attachments/assets/4c6443d6-118c-4f47-88b0-8f65b6fb826f" />
 <img width="200" height="400" alt="Image" src="https://github.com/user-attachments/assets/a866b6ec-4c2e-42c6-81d1-66bf814cf2ab" />
